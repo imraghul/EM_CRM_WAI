@@ -516,7 +516,7 @@ with c1:
         title=dict(text="CRM Tier Distribution", font=dict(color="#EEF2FF", size=14)),
         yaxis=dict(**AX, title="Families"), xaxis=dict(**AX),
         height=300, bargap=0.4)
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 with c2:
     fig = px.scatter(dff, x="FES_score", y="churn_risk_prob",
@@ -533,7 +533,7 @@ with c2:
     fig.update_layout(**PT,
         title=dict(text="FES Score vs Churn Risk by Tier", font=dict(color="#EEF2FF", size=14)),
         xaxis=dict(**AX), yaxis=dict(**AX), height=300)
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 
 # ──────────────────────────────────────────────────────────────
@@ -557,7 +557,7 @@ with c3:
     fig.update_layout(**PT,
         title=dict(text="CRM Tier by Lifecycle Stage", font=dict(color="#EEF2FF", size=14)),
         xaxis=dict(**AX), yaxis=dict(**AX), height=300)
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 with c4:
     cohort_churn = (dff.groupby("lifecycle_stage", observed=True)["churn_risk_prob"]
@@ -574,7 +574,7 @@ with c4:
     fig.update_layout(**PT,
         title=dict(text="Avg Churn Risk by Stage", font=dict(color="#EEF2FF", size=14)),
         xaxis=dict(**AX, range=[0, 0.85]), yaxis=dict(**AX), height=300)
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 
 # ──────────────────────────────────────────────────────────────
@@ -599,7 +599,7 @@ with c5:
     fig.update_layout(**PT,
         title=dict(text="Avg Propensity by CRM Tier", font=dict(color="#EEF2FF", size=14)),
         xaxis=dict(**AX), yaxis=dict(**AX), height=300)
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 with c6:
     plan_churn = dff.groupby("plan_type")["churn_risk_prob"].mean().reset_index()
@@ -614,7 +614,7 @@ with c6:
     fig.update_layout(**PT,
         title=dict(text="Churn Risk vs FES by Plan Type", font=dict(color="#EEF2FF", size=14)),
         barmode="group", xaxis=dict(**AX), yaxis=dict(**AX), height=300)
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 
 # ──────────────────────────────────────────────────────────────
@@ -648,7 +648,7 @@ with c7:
     fig.update_layout(**PT,
         title=dict(text="Feature Impact on Churn (|Correlation|)", font=dict(color="#EEF2FF", size=14)),
         xaxis=dict(**AX, range=[0,0.85]), yaxis=dict(**AX), height=290)
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 with c8:
     all_avg = dff[features].mean()
@@ -676,7 +676,7 @@ with c8:
         title=dict(text="RED vs All Families · Feature Profile", font=dict(color="#EEF2FF", size=14)),
         height=290,
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 
 # ──────────────────────────────────────────────────────────────
@@ -742,14 +742,30 @@ top_risk = (
                "months_active","caregiver_rating_avg","incidents_resolved_pct"]]
     .reset_index(drop=True)
 )
+def color_churn(val):
+    if val >= 0.75:
+        return "background-color: rgba(255,60,80,0.35); color: #FFD0D8;"
+    elif val >= 0.60:
+        return "background-color: rgba(255,80,100,0.22); color: #FFBFC9;"
+    elif val >= 0.45:
+        return "background-color: rgba(255,150,60,0.18); color: #FFD9B0;"
+    return "background-color: rgba(0,200,140,0.12); color: #A8F0DC;"
+
+def color_fes(val):
+    if val >= 65:
+        return "background-color: rgba(0,212,170,0.20); color: #A8F0DC;"
+    elif val >= 50:
+        return "background-color: rgba(255,181,71,0.15); color: #FFE0A0;"
+    return "background-color: rgba(255,60,80,0.20); color: #FFD0D8;"
+
 st.dataframe(
     top_risk.style
-    .background_gradient(subset=["churn_risk_prob"], cmap="Reds")
-    .background_gradient(subset=["FES_score"], cmap="Greens")
+    .map(color_churn, subset=["churn_risk_prob"])
+    .map(color_fes, subset=["FES_score"])
     .format({"churn_risk_prob":"{:.3f}","FES_score":"{:.1f}",
              "upgrade_prob":"{:.3f}","referral_prob":"{:.3f}",
              "caregiver_rating_avg":"{:.2f}","incidents_resolved_pct":"{:.1f}"}),
-    use_container_width=True, height=480
+    width='stretch', height=480
 )
 
 
