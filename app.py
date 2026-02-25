@@ -103,6 +103,37 @@ section[data-testid="stSidebar"] span {
     font-weight: 400;
     margin: 0;
 }
+.identity-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1rem 1.2rem;
+    margin: -0.8rem 0 1.2rem;
+    position: relative;
+    overflow: hidden;
+}
+.identity-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #00D4AA, #4C9BFF);
+}
+.identity-title {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: #00D4AA;
+    margin-bottom: 0.45rem;
+}
+.identity-line {
+    font-size: 0.80rem;
+    color: #B0BCDB;
+    line-height: 1.6;
+}
 
 .kpi-card {
     background: var(--bg2);
@@ -469,10 +500,14 @@ st.markdown("""
         AI-powered churn prediction, upgrade propensity &amp; referral scoring for elderly in-home care subscriptions &nbsp;·&nbsp;
         3 ML models &nbsp;·&nbsp; 1 composite FES scoring engine &nbsp;·&nbsp; 700 synthetic families
     </p>
-    <p class="hero-sub" style="margin-top:0.6rem;color:#B0BCDB;">
-        Name : Raghul G<br>
-        Roll No : M042-24
-    </p>
+</div>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+<div class="identity-card">
+    <div class="identity-title">Project Owner</div>
+    <div class="identity-line">Name : Raghul G</div>
+    <div class="identity-line">Roll No : M042-24</div>
 </div>
 """, unsafe_allow_html=True)
 
