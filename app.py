@@ -106,9 +106,9 @@ section[data-testid="stSidebar"] span {
 .identity-card {
     background: var(--bg2);
     border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 1rem 1.2rem;
-    margin: -0.8rem 0 1.2rem;
+    border-radius: 16px;
+    padding: 1.35rem 1.6rem;
+    margin: 0 0 1.2rem;
     position: relative;
     overflow: hidden;
 }
@@ -118,22 +118,25 @@ section[data-testid="stSidebar"] span {
     top: 0;
     left: 0;
     width: 100%;
-    height: 3px;
+    height: 4px;
     background: linear-gradient(90deg, #00D4AA, #4C9BFF);
 }
 .identity-title {
-    font-size: 0.68rem;
+    font-size: 0.75rem;
     font-weight: 700;
-    letter-spacing: 0.8px;
+    letter-spacing: 1px;
     text-transform: uppercase;
     color: #00D4AA;
-    margin-bottom: 0.45rem;
+    margin-bottom: 0.55rem;
 }
 .identity-line {
-    font-size: 0.80rem;
-    color: #B0BCDB;
-    line-height: 1.6;
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.28rem;
+    color: #EEF2FF;
+    line-height: 1.35;
+    letter-spacing: -0.2px;
 }
+.identity-line + .identity-line { margin-top: 0.15rem; }
 
 .kpi-card {
     background: var(--bg2);
