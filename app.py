@@ -469,6 +469,10 @@ st.markdown("""
         AI-powered churn prediction, upgrade propensity &amp; referral scoring for elderly in-home care subscriptions &nbsp;·&nbsp;
         3 ML models &nbsp;·&nbsp; 1 composite FES scoring engine &nbsp;·&nbsp; 700 synthetic families
     </p>
+    <p class="hero-sub" style="margin-top:0.6rem;color:#B0BCDB;">
+        Name : Raghul G<br>
+        Roll No : M042-24
+    </p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -952,7 +956,6 @@ with mfes:
 
 st.markdown("""
 <div style="text-align:center;font-size:0.73rem;color:#8898BB;margin-top:1.5rem;padding-top:1rem;border-top:1px solid rgba(76,155,255,0.08);">
-  CareVeda Intelligence Hub &nbsp;·&nbsp; MBA WAI Project &nbsp;·&nbsp;
-  Built with Streamlit + Plotly &nbsp;·&nbsp; Fully self-contained &nbsp;·&nbsp; No external dependencies
+  CareVeda Intelligence Hub &nbsp;·&nbsp; MBA WAI Project &nbsp;·&nbsp; Raghul G | M042-24
 </div>
 """, unsafe_allow_html=True)
