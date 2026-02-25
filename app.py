@@ -770,113 +770,126 @@ st.dataframe(
 
 
 # ──────────────────────────────────────────────────────────────
-# ARCHITECTURE SECTION
+# ARCHITECTURE SECTION — rebuilt with st.columns to avoid raw HTML rendering
 # ──────────────────────────────────────────────────────────────
 st.markdown("<hr class='divider-line'>", unsafe_allow_html=True)
 
 st.markdown("""
-<div class="arch-section">
-
-  <div class="arch-title">How This Was Built</div>
-  <div class="arch-subtitle">
+<div style="background:var(--bg1);border:1px solid var(--border);border-radius:18px;padding:2rem 2.5rem 1.5rem;">
+  <div style="font-family:'DM Serif Display',serif;font-size:1.5rem;color:#EEF2FF;text-align:center;margin-bottom:0.3rem;">How This Was Built</div>
+  <div style="font-size:0.82rem;color:#8898BB;text-align:center;margin-bottom:1.8rem;">
     3 Predictive ML Models &nbsp;·&nbsp; 1 Composite Scoring Engine &nbsp;·&nbsp; End-to-end CRM intelligence pipeline
   </div>
+</div>
+""", unsafe_allow_html=True)
 
-  <div class="arch-pipeline">
-    <div class="arch-node input-node">
-      <div class="arch-node-icon">📊</div>
-      <div class="arch-node-label">Input Features</div>
-      <div class="arch-node-desc">App logins · Rating<br>Tenure · Incidents<br>Report opens</div>
+# Pipeline diagram — 5 nodes using columns
+st.markdown("""
+<div style="background:var(--bg1);border:1px solid var(--border);border-left:none;border-right:none;border-top:none;border-radius:0;padding:0 2.5rem;">
+  <div style="display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;padding-bottom:1.5rem;">
+    <div style="background:var(--bg2);border:1px solid rgba(76,155,255,0.30);border-radius:12px;padding:1rem 1.3rem;text-align:center;min-width:120px;">
+      <div style="font-size:1.4rem;margin-bottom:0.3rem;">📊</div>
+      <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.7px;text-transform:uppercase;color:#4C9BFF;margin-bottom:0.2rem;">Input Features</div>
+      <div style="font-size:0.70rem;color:#8898BB;line-height:1.4;">App logins · Rating<br>Tenure · Incidents<br>Report opens</div>
     </div>
-    <div class="arch-arrow">&#8594;</div>
-    <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center;">
-      <div class="arch-node model-node-a">
-        <div class="arch-node-icon">🔴</div>
-        <div class="arch-node-label">Model A</div>
-        <div class="arch-node-desc">Churn Prediction<br>XGBoost</div>
+    <div style="color:#8898BB;font-size:1.3rem;padding:0 0.5rem;">&#8594;</div>
+    <div style="display:flex;flex-direction:column;gap:0.4rem;">
+      <div style="background:var(--bg2);border:1px solid rgba(255,92,122,0.35);border-radius:10px;padding:0.6rem 1rem;text-align:center;">
+        <span style="font-size:0.68rem;font-weight:700;text-transform:uppercase;color:#FF5C7A;">Model A</span>
+        <span style="font-size:0.68rem;color:#8898BB;margin-left:0.4rem;">Churn · XGBoost</span>
       </div>
-      <div class="arch-node model-node-b">
-        <div class="arch-node-icon">🟣</div>
-        <div class="arch-node-label">Model B</div>
-        <div class="arch-node-desc">Upgrade Propensity<br>Logistic Reg.</div>
+      <div style="background:var(--bg2);border:1px solid rgba(155,114,240,0.35);border-radius:10px;padding:0.6rem 1rem;text-align:center;">
+        <span style="font-size:0.68rem;font-weight:700;text-transform:uppercase;color:#9B72F0;">Model B</span>
+        <span style="font-size:0.68rem;color:#8898BB;margin-left:0.4rem;">Upgrade · Logistic</span>
       </div>
-      <div class="arch-node model-node-c">
-        <div class="arch-node-icon">🟢</div>
-        <div class="arch-node-label">Model C</div>
-        <div class="arch-node-desc">Referral Likelihood<br>Random Forest</div>
-      </div>
-    </div>
-    <div class="arch-arrow">&#8594;</div>
-    <div class="arch-node fes-node">
-      <div class="arch-node-icon">&#9889;</div>
-      <div class="arch-node-label">FES Engine</div>
-      <div class="arch-node-desc">
-        (1 &minus; churn) &times; 0.50<br>
-        + upgrade &times; 0.25<br>
-        + referral &times; 0.25
+      <div style="background:var(--bg2);border:1px solid rgba(0,212,170,0.35);border-radius:10px;padding:0.6rem 1rem;text-align:center;">
+        <span style="font-size:0.68rem;font-weight:700;text-transform:uppercase;color:#00D4AA;">Model C</span>
+        <span style="font-size:0.68rem;color:#8898BB;margin-left:0.4rem;">Referral · RF</span>
       </div>
     </div>
-    <div class="arch-arrow">&#8594;</div>
-    <div class="arch-node output-node">
-      <div class="arch-node-icon">&#127919;</div>
-      <div class="arch-node-label">CRM Tiers</div>
-      <div class="arch-node-desc">RED · AMBER<br>GREEN<br>+ Playbook</div>
+    <div style="color:#8898BB;font-size:1.3rem;padding:0 0.5rem;">&#8594;</div>
+    <div style="background:rgba(255,181,71,0.04);border:1px solid rgba(255,181,71,0.40);border-radius:12px;padding:1rem 1.3rem;text-align:center;min-width:130px;">
+      <div style="font-size:1.4rem;margin-bottom:0.3rem;">⚡</div>
+      <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.7px;text-transform:uppercase;color:#FFB547;margin-bottom:0.2rem;">FES Engine</div>
+      <div style="font-size:0.70rem;color:#8898BB;line-height:1.4;">(1−churn)×0.50<br>+upgrade×0.25<br>+referral×0.25</div>
+    </div>
+    <div style="color:#8898BB;font-size:1.3rem;padding:0 0.5rem;">&#8594;</div>
+    <div style="background:var(--bg2);border:1px solid rgba(76,155,255,0.30);border-radius:12px;padding:1rem 1.3rem;text-align:center;min-width:110px;">
+      <div style="font-size:1.4rem;margin-bottom:0.3rem;">🎯</div>
+      <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.7px;text-transform:uppercase;color:#4C9BFF;margin-bottom:0.2rem;">CRM Tiers</div>
+      <div style="font-size:0.70rem;color:#8898BB;line-height:1.4;">RED · AMBER<br>GREEN<br>+ Playbook</div>
     </div>
   </div>
+</div>
+""", unsafe_allow_html=True)
 
-  <div class="model-cards">
+# Model cards — use st.columns so Streamlit renders them natively
+ma, mb, mc, mfes = st.columns(4)
 
+with ma:
+    st.markdown("""
     <div class="model-card card-a">
       <div class="model-badge">Model A</div>
       <div class="model-card-title">Churn Prediction</div>
-      <div class="model-card-type">Binary Classification · XGBoost (class-balanced)</div>
+      <div class="model-card-type">Binary Classification · XGBoost</div>
       <div class="model-row"><span class="model-row-label">Target</span><span class="model-row-value">churned_within_6months</span></div>
+      <div class="model-row"><span class="model-row-label">Algorithm</span><span class="model-row-value">XGBoost (balanced)</span></div>
       <div class="model-row"><span class="model-row-label">Key features</span><span class="model-row-value">Rating, Logins, Tenure</span></div>
       <div class="model-row"><span class="model-row-label">Business use</span><span class="model-row-value">Retention intervention</span></div>
       <div class="model-row"><span class="model-row-label">FES weight</span><span class="model-row-value">50% (inverted)</span></div>
     </div>
+    """, unsafe_allow_html=True)
 
+with mb:
+    st.markdown("""
     <div class="model-card card-b">
       <div class="model-badge">Model B</div>
       <div class="model-card-title">Upgrade Propensity</div>
       <div class="model-card-type">Binary Classification · Logistic Regression</div>
       <div class="model-row"><span class="model-row-label">Target</span><span class="model-row-value">upgraded_plan</span></div>
+      <div class="model-row"><span class="model-row-label">Algorithm</span><span class="model-row-value">Logistic Regression</span></div>
       <div class="model-row"><span class="model-row-label">Key features</span><span class="model-row-value">Plan type, Tenure, FES</span></div>
       <div class="model-row"><span class="model-row-label">Business use</span><span class="model-row-value">Expansion revenue</span></div>
       <div class="model-row"><span class="model-row-label">FES weight</span><span class="model-row-value">25%</span></div>
     </div>
+    """, unsafe_allow_html=True)
 
+with mc:
+    st.markdown("""
     <div class="model-card card-c">
       <div class="model-badge">Model C</div>
       <div class="model-card-title">Referral Likelihood</div>
       <div class="model-card-type">Binary Classification · Random Forest</div>
       <div class="model-row"><span class="model-row-label">Target</span><span class="model-row-value">referred_another_family</span></div>
+      <div class="model-row"><span class="model-row-label">Algorithm</span><span class="model-row-value">Random Forest</span></div>
       <div class="model-row"><span class="model-row-label">Key features</span><span class="model-row-value">Rating, Plan, Tenure</span></div>
       <div class="model-row"><span class="model-row-label">Business use</span><span class="model-row-value">Organic growth flywheel</span></div>
       <div class="model-row"><span class="model-row-label">FES weight</span><span class="model-row-value">25%</span></div>
     </div>
+    """, unsafe_allow_html=True)
 
+with mfes:
+    st.markdown("""
     <div class="model-card card-fes">
       <div class="model-badge">FES Engine</div>
       <div class="model-card-title">Family Engagement Score</div>
-      <div class="model-card-type">Composite Scoring Layer · Not a standalone ML model</div>
+      <div class="model-card-type">Composite Scoring Layer · Not a standalone model</div>
       <div class="model-row"><span class="model-row-label">Output range</span><span class="model-row-value">0 to 100</span></div>
-      <div class="model-row"><span class="model-row-label">Inputs</span><span class="model-row-value">All 3 model probabilities</span></div>
-      <div class="model-row"><span class="model-row-label">Drives</span><span class="model-row-value">RED / AMBER / GREEN tier</span></div>
+      <div class="model-row"><span class="model-row-label">Inputs</span><span class="model-row-value">All 3 model outputs</span></div>
+      <div class="model-row"><span class="model-row-label">Drives</span><span class="model-row-value">RED / AMBER / GREEN</span></div>
       <div class="formula-box">
-        FES = (1 &minus; P_churn)  &times; 0.50<br>
-            + P_upgrade           &times; 0.25<br>
-            + P_referral          &times; 0.25<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;scaled to 0&ndash;100
+        FES =<br>
+        (1 &minus; P_churn) &times; 0.50<br>
+        + P_upgrade &times; 0.25<br>
+        + P_referral &times; 0.25<br>
+        scaled to 0&ndash;100
       </div>
     </div>
+    """, unsafe_allow_html=True)
 
-  </div>
-
-  <div style="text-align:center;font-size:0.73rem;color:#8898BB;padding-top:1rem;border-top:1px solid rgba(76,155,255,0.08);">
-    CareVeda Intelligence Hub &nbsp;·&nbsp; MBA WAI Project &nbsp;·&nbsp;
-    Built with Streamlit + Plotly &nbsp;·&nbsp; Fully self-contained &nbsp;·&nbsp; No external dependencies
-  </div>
-
+st.markdown("""
+<div style="text-align:center;font-size:0.73rem;color:#8898BB;margin-top:1.5rem;padding-top:1rem;border-top:1px solid rgba(76,155,255,0.08);">
+  CareVeda Intelligence Hub &nbsp;·&nbsp; MBA WAI Project &nbsp;·&nbsp;
+  Built with Streamlit + Plotly &nbsp;·&nbsp; Fully self-contained &nbsp;·&nbsp; No external dependencies
 </div>
 """, unsafe_allow_html=True)
