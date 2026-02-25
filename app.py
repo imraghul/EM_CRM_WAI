@@ -305,6 +305,16 @@ section[data-testid="stSidebar"] span {
     border-top: 1px solid var(--border);
     margin: 1.5rem 0;
 }
+.inference-note {
+    margin-top: 0.45rem;
+    padding: 0.55rem 0.75rem;
+    border-radius: 10px;
+    border: 1px solid rgba(0,212,170,0.18);
+    background: rgba(0,212,170,0.05);
+    color: #BDEFE3;
+    font-size: 0.76rem;
+    line-height: 1.45;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -395,6 +405,10 @@ PT = dict(
     margin=dict(l=10, r=10, t=40, b=10),
 )
 AX = dict(gridcolor="rgba(255,255,255,0.05)", zerolinecolor="rgba(0,0,0,0)", tickfont=dict(color="#B0BCDB"))
+
+
+def render_inference(text):
+    st.markdown(f"<div class='inference-note'><b>Inference:</b> {text}</div>", unsafe_allow_html=True)
 
 
 # ──────────────────────────────────────────────────────────────
@@ -517,6 +531,11 @@ with c1:
         yaxis=dict(**AX, title="Families"), xaxis=dict(**AX),
         height=300, bargap=0.4)
     st.plotly_chart(fig, width='stretch')
+    top_tier = tier_df.sort_values("count", ascending=False).iloc[0]
+    render_inference(
+        f"{top_tier['CRM_tier']} is the largest segment with {int(top_tier['count'])} families "
+        f"({top_tier['pct']:.1f}% of the filtered base)."
+    )
 
 with c2:
     fig = px.scatter(dff, x="FES_score", y="churn_risk_prob",
@@ -534,6 +553,12 @@ with c2:
         title=dict(text="FES Score vs Churn Risk by Tier", font=dict(color="#EEF2FF", size=14)),
         xaxis=dict(**AX), yaxis=dict(**AX), height=300)
     st.plotly_chart(fig, width='stretch')
+    safe_count = ((dff["FES_score"] >= fes_threshold) & (dff["churn_risk_prob"] < churn_threshold)).sum()
+    fes_churn_corr = dff["FES_score"].corr(dff["churn_risk_prob"])
+    render_inference(
+        f"{safe_count} families currently sit in the safer zone (right of FES floor and below churn cutoff). "
+        f"FES and churn show a {fes_churn_corr:.2f} correlation, confirming higher engagement aligns with lower churn risk."
+    )
 
 
 # ──────────────────────────────────────────────────────────────
@@ -558,6 +583,16 @@ with c3:
         title=dict(text="CRM Tier by Lifecycle Stage", font=dict(color="#EEF2FF", size=14)),
         xaxis=dict(**AX), yaxis=dict(**AX), height=300)
     st.plotly_chart(fig, width='stretch')
+    red_share_by_stage = (
+        cohort.pivot(index="lifecycle_stage", columns="CRM_tier", values="count")
+        .fillna(0)
+    )
+    red_share_by_stage["red_share"] = red_share_by_stage.get("RED", 0) / red_share_by_stage.sum(axis=1)
+    top_red_stage = red_share_by_stage["red_share"].idxmax()
+    top_red_pct = red_share_by_stage["red_share"].max() * 100
+    render_inference(
+        f"The highest RED concentration appears in {top_red_stage}, where RED families are {top_red_pct:.1f}% of that cohort."
+    )
 
 with c4:
     cohort_churn = (dff.groupby("lifecycle_stage", observed=True)["churn_risk_prob"]
@@ -575,6 +610,11 @@ with c4:
         title=dict(text="Avg Churn Risk by Stage", font=dict(color="#EEF2FF", size=14)),
         xaxis=dict(**AX, range=[0, 0.85]), yaxis=dict(**AX), height=300)
     st.plotly_chart(fig, width='stretch')
+    risk_peak = cohort_churn.sort_values("churn_risk_prob", ascending=False).iloc[0]
+    render_inference(
+        f"{risk_peak['lifecycle_stage']} has the highest average churn risk at {risk_peak['churn_risk_prob']:.2f}, "
+        f"so this stage should be prioritized for retention workflows."
+    )
 
 
 # ──────────────────────────────────────────────────────────────
@@ -600,6 +640,12 @@ with c5:
         title=dict(text="Avg Propensity by CRM Tier", font=dict(color="#EEF2FF", size=14)),
         xaxis=dict(**AX), yaxis=dict(**AX), height=300)
     st.plotly_chart(fig, width='stretch')
+    strongest_upgrade = grouped.sort_values("upgrade_prob", ascending=False).iloc[0]
+    strongest_referral = grouped.sort_values("referral_prob", ascending=False).iloc[0]
+    render_inference(
+        f"Highest upgrade propensity is in {strongest_upgrade['CRM_tier']} ({strongest_upgrade['upgrade_prob']:.2f}) "
+        f"and highest referral likelihood is in {strongest_referral['CRM_tier']} ({strongest_referral['referral_prob']:.2f})."
+    )
 
 with c6:
     plan_churn = dff.groupby("plan_type")["churn_risk_prob"].mean().reset_index()
@@ -615,6 +661,11 @@ with c6:
         title=dict(text="Churn Risk vs FES by Plan Type", font=dict(color="#EEF2FF", size=14)),
         barmode="group", xaxis=dict(**AX), yaxis=dict(**AX), height=300)
     st.plotly_chart(fig, width='stretch')
+    best_plan = merged.sort_values(["churn_risk_prob", "FES_score"], ascending=[True, False]).iloc[0]
+    render_inference(
+        f"{best_plan['plan_type']} currently shows the healthiest profile: churn risk {best_plan['churn_risk_prob']:.2f} "
+        f"with average FES {best_plan['FES_score']:.1f}."
+    )
 
 
 # ──────────────────────────────────────────────────────────────
@@ -649,6 +700,11 @@ with c7:
         title=dict(text="Feature Impact on Churn (|Correlation|)", font=dict(color="#EEF2FF", size=14)),
         xaxis=dict(**AX, range=[0,0.85]), yaxis=dict(**AX), height=290)
     st.plotly_chart(fig, width='stretch')
+    top_driver = shap_df.sort_values("Impact", ascending=False).iloc[0]
+    render_inference(
+        f"{top_driver['Feature']} is the strongest churn signal (impact {top_driver['Impact']:.3f}) "
+        f"and behaves as a {top_driver['Direction'].lower()}."
+    )
 
 with c8:
     all_avg = dff[features].mean()
@@ -677,6 +733,13 @@ with c8:
         height=290,
     )
     st.plotly_chart(fig, width='stretch')
+    ratio_series = pd.Series(norm_red, index=feat_labels)
+    largest_gap_feature = ratio_series.sub(1).abs().idxmax()
+    largest_gap_ratio = ratio_series[largest_gap_feature]
+    render_inference(
+        f"The largest RED-vs-overall deviation is in {largest_gap_feature} at {largest_gap_ratio:.2f}x the baseline, "
+        f"highlighting where RED families differ most operationally."
+    )
 
 
 # ──────────────────────────────────────────────────────────────
