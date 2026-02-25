@@ -349,6 +349,14 @@ section[data-testid="stSidebar"] span {
 </style>
 """, unsafe_allow_html=True)
 
+st.markdown("""
+<div class="identity-card">
+    <div class="identity-title">Project Owner</div>
+    <div class="identity-line">Name : Raghul G</div>
+    <div class="identity-line">Roll No : M042-24</div>
+</div>
+""", unsafe_allow_html=True)
+
 
 # ──────────────────────────────────────────────────────────────
 # DATA GENERATION
@@ -500,14 +508,6 @@ st.markdown("""
         AI-powered churn prediction, upgrade propensity &amp; referral scoring for elderly in-home care subscriptions &nbsp;·&nbsp;
         3 ML models &nbsp;·&nbsp; 1 composite FES scoring engine &nbsp;·&nbsp; 700 synthetic families
     </p>
-</div>
-""", unsafe_allow_html=True)
-
-st.markdown("""
-<div class="identity-card">
-    <div class="identity-title">Project Owner</div>
-    <div class="identity-line">Name : Raghul G</div>
-    <div class="identity-line">Roll No : M042-24</div>
 </div>
 """, unsafe_allow_html=True)
 
